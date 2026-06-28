@@ -1,0 +1,28 @@
+[package]
+name = "marginguard-infra"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Adapters for MarginGuard: in-memory and Postgres position stores, a broadcast event bus, and a deterministic mark-price oracle simulator."
+
+[dependencies]
+marginguard-types = { workspace = true }
+marginguard-core = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+tokio-stream = { workspace = true, features = ["sync"] }
+futures = { workspace = true }
+parking_lot = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+sqlx = { workspace = true, optional = true }
+
+[features]
+default = []
+postgres = ["dep:sqlx"]
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

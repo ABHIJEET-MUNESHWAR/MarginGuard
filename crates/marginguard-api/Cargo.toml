@@ -1,0 +1,23 @@
+[package]
+name = "marginguard-api"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "GraphQL API for MarginGuard: queries, mutations, and subscriptions over the risk engine and AI advisor."
+
+[dependencies]
+marginguard-types = { workspace = true }
+marginguard-core = { workspace = true }
+marginguard-ai = { workspace = true }
+async-graphql = { workspace = true }
+futures = { workspace = true }
+tokio-stream = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+marginguard-infra = { workspace = true }
+serde_json = { workspace = true }

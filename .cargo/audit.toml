@@ -1,0 +1,9 @@
+# cargo-audit configuration (auto-loaded from cwd by `cargo audit`).
+#
+# RUSTSEC-2023-0071 (rsa "Marvin Attack" timing side-channel) is a PHANTOM
+# Cargo.lock entry pulled in only via sqlx's OPTIONAL `sqlx-mysql` driver.
+# MarginGuard is Postgres-only, so `rsa` is NEVER compiled
+# (`cargo tree -i rsa --all-features` returns nothing). No upstream fix exists.
+# Re-evaluate when a fixed `rsa` ships or if MySQL support is ever enabled.
+[advisories]
+ignore = ["RUSTSEC-2023-0071"]

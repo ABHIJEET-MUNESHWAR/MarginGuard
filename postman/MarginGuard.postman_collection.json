@@ -1,0 +1,337 @@
+{
+  "info": {
+    "name": "MarginGuard",
+    "description": "GraphQL API for the MarginGuard perps margin, funding & liquidation risk engine. Set the {{baseUrl}} variable to your running node (default http://127.0.0.1:8080). Note: openPosition takes an input: object; the other mutations take flat arguments.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Liveness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health/live",
+              "host": ["{{baseUrl}}"],
+              "path": ["health", "live"]
+            }
+          }
+        },
+        {
+          "name": "Readiness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health/ready",
+              "host": ["{{baseUrl}}"],
+              "path": ["health", "ready"]
+            }
+          }
+        },
+        {
+          "name": "Metrics (Prometheus)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/metrics",
+              "host": ["{{baseUrl}}"],
+              "path": ["metrics"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Queries",
+      "item": [
+        {
+          "name": "apiVersion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query { apiVersion }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "accountHealth",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  accountHealth(account: \"alice\", symbol: \"SOL-PERP\") {\n    equity { value }\n    notional { value }\n    maintenanceMargin { value }\n    marginRatioBps\n    liquidatable\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "position",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  position(account: \"alice\", symbol: \"SOL-PERP\") {\n    side size { value } entryPrice { value } leverage postedMargin { value }\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "marketState",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  marketState(symbol: \"SOL-PERP\") {\n    markPrice { value } indexPrice { value } fundingRateBps\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "riskAdvice (GenAI)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  riskAdvice(account: \"alice\", symbol: \"SOL-PERP\") {\n    riskLevel marginRatioBps liquidationDistanceBps recommendedAction summary confidence source\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "insuranceFund",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query { insuranceFund { balance { value micros } } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "riskStats",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query { riskStats { openPositions liquidations fundingSettlements adlEvents } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mutations",
+      "item": [
+        {
+          "name": "updateMarket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateMarket(symbol: \"SOL-PERP\", markPrice: 100.0, indexPrice: 100.0, fundingRateBps: 10) {\n    liquidationCount\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "openPosition",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  openPosition(input: {\n    account: \"alice\", symbol: \"SOL-PERP\", side: LONG, marginMode: CROSS,\n    size: 10.0, entryPrice: 100.0, leverage: 10, margin: 60.0\n  }) {\n    liquidationCount\n    events { kind json }\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "accrueFunding",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation { accrueFunding(symbol: \"SOL-PERP\") { liquidationCount events { kind json } } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "liquidateMarket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation { liquidateMarket(symbol: \"SOL-PERP\") { liquidationCount events { kind json } } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "closePosition",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation { closePosition(account: \"alice\", symbol: \"SOL-PERP\") { liquidationCount events { kind json } } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions (use a WS client at /graphql/ws)",
+      "item": [
+        {
+          "name": "riskEvents (reference)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "subscription { riskEvents { kind json } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql/ws",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql", "ws"]
+            }
+          }
+        },
+        {
+          "name": "liquidationAlerts (reference)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "subscription { liquidationAlerts { kind json } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql/ws",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql", "ws"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

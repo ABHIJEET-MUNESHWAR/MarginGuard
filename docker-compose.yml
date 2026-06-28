@@ -1,0 +1,54 @@
+services:
+  marginguard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: marginguard:latest
+    container_name: marginguard
+    ports:
+      - "8080:8080"
+    environment:
+      MARGINGUARD_LOG_JSON: "true"
+      RUST_LOG: "info,marginguard=debug"
+    command: ["serve", "--host", "0.0.0.0", "--port", "8080"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/health/ready || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: marginguard-prometheus
+    profiles: ["monitoring"]
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - marginguard
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: marginguard-postgres
+    profiles: ["storage"]
+    environment:
+      POSTGRES_USER: marginguard
+      POSTGRES_PASSWORD: marginguard
+      POSTGRES_DB: marginguard
+    ports:
+      - "5432:5432"
+    volumes:
+      - marginguard-pgdata:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marginguard"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  marginguard-pgdata:
