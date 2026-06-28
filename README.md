@@ -14,6 +14,11 @@ funding settled, liquidations, ADL) that settlement, accounting, and alerting
 systems consume.
 
 [![CI](https://github.com/ABHIJEET-MUNESHWAR/MarginGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/ABHIJEET-MUNESHWAR/MarginGuard/actions/workflows/ci.yml)
+[![Stars](https://img.shields.io/github/stars/ABHIJEET-MUNESHWAR/MarginGuard?style=flat&logo=github)](https://github.com/ABHIJEET-MUNESHWAR/MarginGuard/stargazers)
+[![Issues](https://img.shields.io/github/issues/ABHIJEET-MUNESHWAR/MarginGuard)](https://github.com/ABHIJEET-MUNESHWAR/MarginGuard/issues)
+[![Last commit](https://img.shields.io/github/last-commit/ABHIJEET-MUNESHWAR/MarginGuard)](https://github.com/ABHIJEET-MUNESHWAR/MarginGuard/commits/main)
+[![Code size](https://img.shields.io/github/languages/code-size/ABHIJEET-MUNESHWAR/MarginGuard)](https://github.com/ABHIJEET-MUNESHWAR/MarginGuard)
+[![Rust](https://img.shields.io/badge/rust-1.89-orange?logo=rust)](rust-toolchain.toml)
 
 ---
 
